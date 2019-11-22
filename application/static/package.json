@@ -1,0 +1,24 @@
+{
+  "name": "forntend_part",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IgorKreknin/Kiryakin-s_trap.git"
+  },
+  "author": "Kiryakin's_trap",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IgorKreknin/Kiryakin-s_trap/issues"
+  },
+  "homepage": "https://github.com/IgorKreknin/Kiryakin-s_trap#readme",
+  "dependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  }
+}
