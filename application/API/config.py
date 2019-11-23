@@ -4,5 +4,5 @@ api_config = {
     'id_yardCameras': 1498,
     'id_paths': 897,
     'auth_key': 'api_key=58ff41c0abee7d2fe80731ef9f37d833',
-    
+    'standart_range': 6,
 }

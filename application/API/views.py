@@ -35,6 +35,7 @@ def parseMassCameras():
         admArea = p['Cells']['AdmArea'],
         coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
         )
+        data.calculateCameras()
         data.save()
 
 def parceYardCameras():
@@ -72,11 +73,11 @@ def parcePaths():
         data.save()
 
 def index(request):
-    if (len(ParkingSlot.objects.all()) == 0):
-        parseSlots()
     if (len(Camera.objects.all()) == 0):
         parseMassCameras()
         parceYardCameras()
+    if (len(ParkingSlot.objects.all()) == 0):
+        parseSlots()
     if (len(Path.objects.all()) == 0):
         parcePaths()
     return HttpResponse('Working')

@@ -1,5 +1,8 @@
 from django.conf import settings
 from django.db import models
+from .config import api_config
+import json
+from .arithmetics.geoDistance import isCovered
 
 class ParkingSlot(models.Model):
     globalId = models.IntegerField(default = 0)
@@ -12,6 +15,14 @@ class ParkingSlot(models.Model):
     objectOperOrgName = models.TextField()
     coordinates = models.TextField()
     cameras = models.IntegerField(default = 0)
+
+    def calculateCameras():
+        cameras = Camera.objects.all()
+        for i in cameras:
+            if (isCovered(json.loads(self.coordinates),
+            json.loads(i.coordinates), api_config['standart_range'])):
+                self.cameras += 1
+
 
 class Camera(models.Model):
     globalId = models.IntegerField(default = 0)

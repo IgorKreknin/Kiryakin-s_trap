@@ -1,4 +1,4 @@
-from constants import*
+from .constants import*
 from math import pi, cos, sqrt
 
 def degsToRad(degs):
