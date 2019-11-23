@@ -1,2 +1,3 @@
-# Kiryakin-s_trap Sasha sosat
-sosat
+# Kiryakin-s_trap
+
+# Epic fail
