@@ -72,6 +72,22 @@ def parcePaths():
         )
         data.save()
 
+
+def parceKiosks():
+    r =  r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_kiosks'], api_config['api_key']))
+    for p in r.json():
+        if (p['Cells']['Contract'] == 'действует') and (p['Cells']['Specialisation'] in valid_kiosk_specs):
+            data = Kiosk(
+                globalId = p['Cells']['global_id'],         #не уверен в формате "исходных данных"
+                name = p['Cells']['Name'],
+                location = p['Cells']['Location'],
+                coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
+                specialisation = p['Cells']['Specialisation']                       #мб понадобится
+            )
+            data.save()
+
+
 def index(request):
     if (len(Camera.objects.all()) == 0):
         parseMassCameras()
