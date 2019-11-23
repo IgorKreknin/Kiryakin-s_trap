@@ -92,6 +92,59 @@ def parceKiosks():
             data.save()
 
 
+<<<<<<< HEAD
+=======
+def parseKiosksPrefect():                           #хз, будет ли использоваться            #мб можно будет забить всё в один parceKiosks, но мы готовы к различию форматов
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_kiosks_prefect'], api_config['api_key']))
+    for p in r.json():
+        if (p['Cells']['Contract'] == 'действует') and (p['Cells']['Specialisation'] in valid_kiosk_specs):
+            data = Kiosk(
+                globalId = p['Cells']['global_id'],         #не уверен в формате "исходных данных"
+                name = p['Cells']['Name'],
+                location = p['Cells']['Location'],
+                coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
+                specialisation = p['Cells']['Specialisation']                       #мб понадобится
+            )
+            data.save()
+
+
+def parseKiosksReserves():                                       #мб можно будет забить всё в один parceKiosks, но мы готовы к различию форматов
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_kiosks_reserves'], api_config['api_key']))
+    for p in r.json():
+        if (p['Cells']['Contract'] == 'действует') and (p['Cells']['Specialisation'] in valid_kiosk_specs):
+            data = Kiosk(
+                globalId = p['Cells']['global_id'],         #не уверен в формате "исходных данных"
+                name = p['Cells']['Name'],
+                location = p['Cells']['Location'],
+                coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
+                specialisation = p['Cells']['Specialisation']                       #мб понадобится
+            )
+            data.save()   
+
+
+def parseKiosksParks():                                       #мб можно будет забить всё в один parceKiosks, но мы готовы к различию форматов
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_kiosks_parks'], api_config['api_key']))
+    for p in r.json():
+        if (p['Cells']['Contract'] == 'действует') and (p['Cells']['Specialisation'] in valid_kiosk_specs):
+            data = Kiosk(
+                globalId = p['Cells']['global_id'],         #не уверен в формате "исходных данных"
+                name = p['Cells']['Name'],
+                location = p['Cells']['Location'],
+                coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
+                specialisation = p['Cells']['Specialisation']                       #мб понадобится
+            )
+            data.save()
+
+
+def parseShops():
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_shops'], api_config['api_key']))                  #хз, будет ли использоваться
+
+
+>>>>>>> 1d4886d21c8633b215e9a2b2b38de3da0781bd65
 def index(request):
     if (len(Camera.objects.all()) == 0):
         parseMassCameras()
