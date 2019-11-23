@@ -14,8 +14,4 @@ def isCovered(list_P_Pos, list_Cam_Pos):
     delta_y *= earth_radius
 
     return sqrt(delta_x**2 + delta_y**2) < cam_coverage
-
-a = [37.715125, 55.869662]
-b = [37.715170, 55.869637]
-
-print(isCovered(a, b))
+    
