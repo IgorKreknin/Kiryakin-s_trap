@@ -1,5 +1,10 @@
 import React from 'react'
 import styles from '../styles/auth_modal.module.css'
+import userIcon from '../img/userIcon.svg'
+import nameIcon from '../img/nameIcon.svg'
+import keyIcon from '../img/key.svg'
+import lampIcon from '../img/lamp.svg'
+import addIcon from '../img/add.svg'
 
 export class MyForm extends React.Component {
 	constructor() {
@@ -13,8 +18,10 @@ export class MyForm extends React.Component {
 			phone: "",
 			email: "",
 			type: "register",
-			loginStyles: styles.login,
-			registerStyles: styles.register,
+			registerStyles: styles.login_fields,
+			loginStyles: styles.login_fields,
+			iconStyles: styles.hide,
+			placeholder: "РЕГИСТРАЦИЯ",
 		}
 
 		this._onChangeName = this._onChangeName.bind(this);
@@ -52,8 +59,8 @@ export class MyForm extends React.Component {
 			phone: "",
 			email: "",
 			type: this.state.type,
-			loginStyles: styles.login,
 			registerStyles: this.state.registerStyles,
+			placeholder: this.state.placeholder,
 		});
 
 		console.log(result);
@@ -94,10 +101,14 @@ export class MyForm extends React.Component {
 		let st = this.state;
 		if (st.type == "auth"){
 			st.type = "register";
-			st.registerStyles = styles.register;
+			st.placeholder = "РЕГИСТРАЦИЯ";
+			st.registerStyles = styles.login_fields;
+			st.iconStyles = styles.hide;
 		}else{
 			st.type = "auth";
-			st.registerStyles = styles.register_hide;
+			st.placeholder = "ВХОД"
+			st.registerStyles = styles.hide;
+			st.iconStyles = styles.login_image;
 		}
 
 		this.setState(st);
@@ -105,20 +116,38 @@ export class MyForm extends React.Component {
 
 	render() {
 		return(
-			<div>
-			<form onSubmit={this._onSubmit}>
-				<input type="text" name="name" placeholder="Имя" value={this.state.name} onChange={this._onChangeName} className={ this.state.registerStyles }/>
-				<input type="text" name="lastname" placeholder="Фамилия" value={this.state.lastname} onChange={this._onChangeLastname} className={ this.state.registerStyles }/>
-				<input type="text" name="phone" placeholder="Телефон" value={this.state.phone} onChange={this._onChangePhone} className={ this.state.registerStyles } />
-				<input type="text" name="message" placeholder="Логин" value={this.state.login} onChange={this._onChangeLogin} className={ this.state.registerLogin } />
-				<input type="text" name="message" placeholder="Почта" value={this.state.email} onChange={this._onChangeEmail} className={ this.state.registerStyles } />
-				<input type="text" name="message" placeholder="Пароль" value={this.state.password} onChange={this._onChangePassword} className={ this.state.registerLogin } />
-				<input type="text" name="message" placeholder="Повторите пароль" value={this.state.password_repeat} onChange={this._onChangePasswordRepeat} className={ this.state.registerStyles } />
-				<input type="submit" name="send" placeholder="Отправить" />
-			</form>
-			<div onClick = { this._onClickChange }>
-				Сменить
-			</div>
+			<div className = { styles.auth_modal_window }>
+				<img src={ userIcon } alt="" className={ styles.user_icon } />
+				<form onSubmit={this._onSubmit} className = { styles.auth_form }>
+					<div className={ this.state.registerStyles }>
+						<input type="text" name="name" placeholder="Имя" value={this.state.name} onChange={this._onChangeName} />
+					</div>
+					<div className={ this.state.registerStyles }>
+						<input type="text" name="lastname" placeholder="Фамилия" value={this.state.lastname} onChange={this._onChangeLastname} />
+					</div>
+					<div className={ this.state.registerStyles }>
+						<input type="text" name="phone" placeholder="Телефон" value={this.state.phone} onChange={this._onChangePhone}  />
+					</div>
+					<div className={ this.state.loginStyles }>
+						<img src={ nameIcon } alt="" className={ this.state.iconStyles } />
+						<input type="text" name="message" placeholder="Логин" value={this.state.login} onChange={this._onChangeLogin}  />
+					</div>
+					<div className={ this.state.registerStyles }>
+						<input type="text" name="message" placeholder="Почта" value={this.state.email} onChange={this._onChangeEmail}  />
+					</div>
+					<div className={ this.state.loginStyles }>
+						<img src={ keyIcon } alt="" className={ this.state.iconStyles } />
+						<input type="text" name="message" placeholder="Пароль" value={this.state.password} onChange={this._onChangePassword}  />
+						<img src={ lampIcon } alt="" className={ this.state.iconStyles } />
+					</div>
+					<div className={ this.state.registerStyles }>
+						<input type="text" name="message" placeholder="Повторите пароль" value={this.state.password_repeat} onChange={this._onChangePasswordRepeat} />
+					</div>
+					<div style={{height: '40px'}}>
+						<input type="submit" name="send" value={ this.state.placeholder } className={ styles.send_button }/>
+						<img src={ addIcon } className={ styles.add_icon } onClick = { this._onClickChange } alt=""/>
+					</div>
+				</form>
 			</div>
 		)
 	}

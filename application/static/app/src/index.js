@@ -7,7 +7,7 @@ import { Map } from './components/map.jsx'
 import { MyForm } from './components/MyForm.jsx'
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<MyForm />, document.getElementById('root'));
+ReactDOM.render(<div><MyForm /></div>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

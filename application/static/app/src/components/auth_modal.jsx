@@ -13,8 +13,10 @@ export class Auth extends React.Component {
 		return (
 			<div className = { styles.auth_modal_window }>
 				<div className = { styles.input_container }>
+					Login
 				</div>
 				<div className = { styles.input_container }>
+					Password
 				</div>
 			</div>
 		)
