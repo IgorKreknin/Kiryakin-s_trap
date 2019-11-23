@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import ParkingSlot, Camera, Path
 
-# Register your models here.
+admin.site.register(ParkingSlot)
+admin.site.register(Camera)
+admin.site.register(Path)
