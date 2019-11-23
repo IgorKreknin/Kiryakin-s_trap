@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import ParkingSlot, Camera, Path
+from .config import api_config
 import json
 import requests
 
 def parseSlots():
-    r = requests.get('https://apidata.mos.ru/v1/datasets/916/rows/?api_key=58ff41c0abee7d2fe80731ef9f37d833')
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_parkingSlots'], api_config['api_key']))
     for p in r.json():
         data = ParkingSlot(
         globalId = p['Cells']['global_id'],
@@ -21,7 +23,8 @@ def parseSlots():
         data.save()
 
 def parseMassCameras():
-    r = requests.get('https://apidata.mos.ru/v1/datasets/2386/rows/?api_key=58ff41c0abee7d2fe80731ef9f37d833')
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_massCameras'], api_config['api_key']))
     for p in r.json():
         data = Camera(
         globalId = p['Cells']['global_id'],
@@ -35,11 +38,12 @@ def parseMassCameras():
         data.save()
 
 def parceYardCameras():
-    count = requests.get('https://apidata.mos.ru/v1/datasets/1498/count/?api_key=58ff41c0abee7d2fe80731ef9f37d833').json()
+    count = requests.get('https://apidata.mos.ru/v1/datasets/%d/count/?api_key=%d'
+    % (api_config['id_yardCameras'], api_config['api_key'])).json()
     skip = 0
     while (skip <= count):
-        r = requests.get('https://apidata.mos.ru/v1/datasets/1498/rows/?api_key=58ff41c0abee7d2fe80731ef9f37d833&$skip=%d&$top=500'
-        % (skip))
+        r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d&$skip=%d&$top=500'
+        % (api_config['id_yardCameras'], api_config['api_key'], skip))
         print(skip)
         for p in r.json():
             data = Camera(
@@ -55,8 +59,9 @@ def parceYardCameras():
         skip += 500
 
 
-def parcePath():
-    r = requests.get('https://apidata.mos.ru/v1/datasets/897/rows/?api_key=58ff41c0abee7d2fe80731ef9f37d833')
+def parcePaths():
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    % (api_config['id_paths'], api_config['api_key']))
     for p in r.json():
         data = Path(
         globalId = p['Cells']['global_id'],
@@ -73,5 +78,5 @@ def index(request):
         parseMassCameras()
         parceYardCameras()
     if (len(Path.objects.all()) == 0):
-        parcePath()
+        parcePaths()
     return HttpResponse('Working')
