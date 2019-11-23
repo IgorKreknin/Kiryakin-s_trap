@@ -16,13 +16,6 @@ class ParkingSlot(models.Model):
     coordinates = models.TextField()
     cameras = models.IntegerField(default = 0)
 
-    def calculateCameras():
-        cameras = Camera.objects.all()
-        for i in cameras:
-            if (isCovered(json.loads(self.coordinates),
-            json.loads(i.coordinates), api_config['standart_range'])):
-                self.cameras += 1
-
 
 class Camera(models.Model):
     globalId = models.IntegerField(default = 0)
