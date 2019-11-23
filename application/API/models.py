@@ -35,3 +35,10 @@ class Path(models.Model):
 
 class Kiosk(models.Model):
     globalId = models.IntegerField(default = 0)
+    name = models.TextField()
+    admArea = models.TextField()
+    district = models.TextField()
+    address = models.TextField()
+    objectType = models.TextField()
+    nameOfBusinessEntity = models.TextField()
+    coordinates = models.TextField()
