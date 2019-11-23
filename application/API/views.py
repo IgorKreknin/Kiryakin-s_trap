@@ -2,12 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import ParkingSlot, Camera, Path
 from .config import api_config
+from .arithmetics.geoDistance import isCovered, geoDistance
 import json
 import requests
 
 def parseSlots():
-    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%s'
     % (api_config['id_parkingSlots'], api_config['api_key']))
+    cameras = Camera.objects.all()
     for p in r.json():
         data = ParkingSlot(
         globalId = p['Cells']['global_id'],
@@ -20,10 +22,13 @@ def parseSlots():
         objectOperOrgName = p['Cells']['ObjectOperOrgName'],
         coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
         )
+        for i in cameras:
+            if(geoDistance(json.loads(data.coordinates), json.loads(i.coordinates)) <= api_config['standart_range']):
+                data.cameras += 1
         data.save()
 
 def parseMassCameras():
-    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%s'
     % (api_config['id_massCameras'], api_config['api_key']))
     for p in r.json():
         data = Camera(
@@ -35,7 +40,6 @@ def parseMassCameras():
         admArea = p['Cells']['AdmArea'],
         coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
         )
-        data.calculateCameras()
         data.save()
 
 def parceYardCameras():
@@ -43,7 +47,7 @@ def parceYardCameras():
     % (api_config['id_yardCameras'], api_config['api_key'])).json()
     skip = 0
     while (skip <= count):
-        r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d&$skip=%d&$top=500'
+        r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%s&$skip=%d&$top=500'
         % (api_config['id_yardCameras'], api_config['api_key'], skip))
         print(skip)
         for p in r.json():
@@ -61,7 +65,7 @@ def parceYardCameras():
 
 
 def parcePaths():
-    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%d'
+    r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%s'
     % (api_config['id_paths'], api_config['api_key']))
     for p in r.json():
         data = Path(
