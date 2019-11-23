@@ -63,10 +63,10 @@ export class MyForm extends React.Component {
 			placeholder: this.state.placeholder,
 		});
 
-		console.log(result);
+		console.log(JSON.stringify(result));
 		let xhr = new XMLHttpRequest();
-		xhr.open('GET', 'http://127.0.0.1:8000/test', true);
-		xhr.send(result);
+		xhr.open('POST', 'http://localhost:8000/authback/', true);
+		xhr.send(JSON.stringify(result));
   	}
 
 	_onChangeName(event){
@@ -99,7 +99,7 @@ export class MyForm extends React.Component {
 
 	_onClickChange(){
 		let st = this.state;
-		if (st.type == "auth"){
+		if (st.type === "auth"){
 			st.type = "register";
 			st.placeholder = "РЕГИСТРАЦИЯ";
 			st.registerStyles = styles.login_fields;

@@ -8,7 +8,6 @@ class User(models.Model):
     login = models.CharField(max_length = 20)
     passw = models.CharField(max_length = 30)
     email = models.EmailField()
-    date = models.DateField()
     bicycle = models.TextField(blank = True)
     premium = models.BooleanField(default = False)
 
