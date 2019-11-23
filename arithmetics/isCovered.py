@@ -14,4 +14,3 @@ def isCovered(list_P_Pos, list_Cam_Pos):
     delta_y *= earth_radius
 
     return sqrt(delta_x**2 + delta_y**2) < cam_coverage
-    
