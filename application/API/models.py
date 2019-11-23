@@ -32,3 +32,6 @@ class Path(models.Model):
     name = models.TextField()
     location = models.TextField()
     coordinates = models.TextField()
+
+class Kiosk(models.Model):
+    globalId = models.IntegerField(default = 0)
