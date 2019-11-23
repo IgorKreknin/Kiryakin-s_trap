@@ -2,9 +2,8 @@
 	position: absolute;
 	top: 0;
 	left: 33%;
-	height: 50%;
+	min-height: 50%;
 	width: 34%;
-	text-align: center;
 	background: #00c0ff;
 }
 
@@ -12,14 +11,33 @@
 	display: none;
 }
 
-.input_container {
-	position: absolute;
-	display: inline;
+input {
+	flex: 1 1 auto;
+	position: relative;
+	width: 100%;
+	height: 25px;
+	padding: 7px;
+	border: none;
+}
+
+.send_button {
+	position: relative;
 	width: 70%;
-	height: 50px;
-	margin-top: 3%;
-	margin-bottom: 3%;
-	background: white;
+	height: 60px;
+	padding: 0;
+	bottom: 0;
+	font-family: "Franklin Gothic";
+	font-size: 150%;
+	color: white;
+	background-color: #7fdeff;
+	border: none;
+	cursor: pointer;
+}
+
+.auth_form {
+	position: relative;
+	width: 70%;
+	margin-left: 15%;
 }
 
 .login {
@@ -36,4 +54,39 @@
 
 .register_hide {
 	display: none;
+}
+
+.user_icon {
+	display: relative;
+	width: 20%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 40%;
+}
+
+.login_fields {
+	display: flex;
+	position: relative;
+	width: 100%;
+	height: 40px;
+	margin-bottom: 10px;
+	left: 0px;
+	background: white;
+}
+
+.hide {
+	display: none;	
+}
+
+.login_image {
+	display: inline;
+	width: 40px;
+	height: 40px;
+}
+
+.add_icon {
+	height: 40px;
+	width: 40px;
+	right: 0;
+	cursor: pointer;
 }
