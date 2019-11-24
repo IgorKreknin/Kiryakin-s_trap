@@ -45,6 +45,7 @@
 
     ymaps.ready(init);
     var myMap;
+    let myObjectManager;
 
     function init() {
 
@@ -83,14 +84,57 @@
         let item = {"type": "Feature", "id": i, "geometry": {"type": "Point",
         "coordinates": [JSON.parse(data[i].coordinates)[1], JSON.parse(data[i].coordinates)[0]]},
         "properties": {"balloonContentBody": pointName}}
-        resultData.features.push(item)
+        resultData.features.push(item);
         //myPlacemark = new ymaps.Placemark([JSON.parse(data[i].coordinates)[1], JSON.parse(data[i].coordinates)[0]]);
         //myMap.geoObjects.add(myPlacemark);
         //myPlacemark.balloon.open();
       }
 
+      myMap.events.add('click', function (event) { //Событие клика на карту
+        let myCoords = myMap.get('coords');
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://127.0.0.1:8000/API/', false);
+        xhr.send(JSON.stringify({"RequestType": "giveNearest", "Point": myCoords}));
+        let data = {};
+
+        if (xhr.statusText == "OK") {
+          data = JSON.parse(xhr.response);
+        } else{
+          console.log('Request error');
+        }
+
+        objectManager.ObjectCollection.removeAll();
+
+        if (data.Result){
+          let localData = JSON.parse(localStorage.getItem('data'));
+          let resultData = {"type": "FeatureCollection", "features": []};
+          for (var i = 0; i < data.Points; i++) {
+            for (var j = 0; j < localData.length; j++){
+              if (localData[j].globalId == data.Points[i]){
+                let pointName = "<div class='yt a_map'>" + localData[i].name + "</div>";
+                let item = {"type": "Feature", "id": i, "geometry": {"type": "Point",
+                "coordinates": [JSON.parse(localData[i].coordinates)[1], JSON.parse(localData[i].coordinates)[0]]},
+                "properties": {"balloonContentBody": pointName}}
+                resultData.features.push(item);
+                break;
+              }
+            }
+          }
+
+          objectManager.add(JSON.stringify(resultData));
+        }
+
+        console.log(data);                
+      })
+
+
+
       objectManager.add(JSON.stringify(resultData));
+      myObjectManager = objectManager;
     };
+
+
 
   </script>
   </body>

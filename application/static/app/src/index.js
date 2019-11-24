@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import { MyForm } from './components/MyForm.jsx'
 import { WindowAbout } from './components/WindowAbout.jsx'
 import * as serviceWorker from './serviceWorker'
