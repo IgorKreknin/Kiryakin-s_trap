@@ -72,6 +72,9 @@
         console.log('Request error');
       }
 
+      localStorage.clear();
+      localStorage.setItem('data', JSON.stringify(data));
+
       let resultData = {"type": "FeatureCollection", "features": []};
 
       for (var i = 0; i < data.length; i++){
@@ -87,32 +90,7 @@
       }
 
       objectManager.add(JSON.stringify(resultData));
-
-      /*
-      myPlacemark = new ymaps.Placemark([55.753215, 37.622504], { // Координаты метки объекта
-        balloonContent: "<div class='yt a_map'>Заезжайте в гости!</div>" // Подсказка метки
-      }, {
-        preset: "twirl#redDotIcon" // Тип метки
-      });
-      */
-
-      //myMap.geoObjects.add(myPlacemark); // Добавление метки
-      //myPlacemark.balloon.open(); // Открытие подсказки метки
-
     };
-
-    /*
-    for (var i = 0; i < data.length; i++){
-      console.log(data[i].coordinates);
-      myPlacemark = new ymaps.Placemark(data[i].coordinates, { // Координаты метки объекта
-        balloonContent: "<div class='yt a_map'>Заезжайте в гости!</div>" // Подсказка метки
-      }, {
-        preset: "twirl#redDotIcon" // Тип метки
-      });
-      myMap.geoObjects.add(myPlacemark);
-    }
-    */
-
 
   </script>
   </body>
