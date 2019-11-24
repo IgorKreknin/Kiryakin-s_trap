@@ -23,10 +23,11 @@ def parseSlots():
         departamentalAffilation = p['Cells']['DepartamentalAffiliation'],
         capacity = p['Cells']['Capacity'],
         objectOperOrgName = p['Cells']['ObjectOperOrgName'],
-        coordinates = json.dumps(p['Cells']['geoData']['coordinates'])
+        coordinates = json.dumps(p['Cells']['geoData']['coordinates']),
         )
         for i in cameras:
-            if(geoDistance(json.loads(data.coordinates), json.loads(i.coordinates)) <= api_config['standart_range']):
+            if(geoDistance(json.loads(data.coordinates), json.loads(i.coordinates))
+            <= api_config['standard_range']):
                 data.cameras += 1
         data.save()
 
@@ -132,6 +133,9 @@ def index(request):
         parceKiosks(api_config['id_kiosks_reserves'])
         parceKiosks(api_config['id_kiosks_parks'])
         return HttpResponse('Parced Kiosks')
+    else:
+        setUserRating()
+        return "Ratings set"
     req = json.loads(request.body.decode('utf-8'))
     if (req['RequestType'] == 'giveData'):
         returnList = []
@@ -140,7 +144,7 @@ def index(request):
             'globalId': i.globalId,
             'name': i.name,
             'coordinates': i.coordinates,
-            'userRating': i.userRating.currentRating,
+            'userRating': i.currentRating,
             })
         return JsonResponse(returnList, safe = False)
     if (req['RequestType'] == 'giveNearest'):
