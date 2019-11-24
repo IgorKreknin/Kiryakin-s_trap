@@ -7,7 +7,7 @@ api_config = {
     'id_kiosks_reserves': 61355, #аналогично
     'id_kiosks_parks': 61356, #аналогично
     'api_key': '58ff41c0abee7d2fe80731ef9f37d833',
-    'standart_range': 10,
+    'standard_range': 10,
 }
 
 valid_kiosk_specs = [
