@@ -102,9 +102,9 @@ def getNearest(coordList):
     radius = 50
     while (len(result) == 0):
         for i in parkingStations:
-            if (geoDistace(coordList, json.loads(parkingStations['coordinates'])) <= 50):
-                result.append()
-        if (radius == 300):
+            if (geoDistace(coordList, json.loads(i['coordinates'])) <= 50):
+                result.append(json.dumps(i))
+        if (radius == 300 and len(result) == 0):
             return {"Result": False}
         radius += 50
     return {"Result": True, "Data": result}
