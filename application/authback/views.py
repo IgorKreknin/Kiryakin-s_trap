@@ -9,7 +9,7 @@ def index(request):
     if (request.method == 'GET'):
         return JsonResponse({"Result": False})
     dict = json.loads(request.body.decode('utf-8'))
-    if (checkRequirements(argDict)):
+    if (checkRequirements(dict)):
         if (dict['type'] == 'register'):
             result = createUser(dict)
         if (dict['type'] == 'auth'):

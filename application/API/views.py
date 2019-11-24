@@ -125,5 +125,9 @@ def index(request):
         parceKiosks(api_config['id_kiosks_reserves'])
         parceKiosks(api_config['id_kiosks_parks'])
         return HttpResponse('Parced Kiosks')
-    print(request.body)
+    req = json.loads(request.body.encode('utf-8'))
+    if (req['RequestType'] == 'giveData'):
+        return JsonResponse(ParkingSlot.objects.all())
+    if (req['RequestType'] == 'giveNearest'):
+        return JsonResponse(getNearest(req['Point']))
     return HttpResponse('Working')
