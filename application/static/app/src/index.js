@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Auth } from './components/auth_modal.jsx'
-import { Map } from './components/map.jsx'
 import { MyForm } from './components/MyForm.jsx'
 import * as serviceWorker from './serviceWorker';
 
