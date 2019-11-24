@@ -1,11 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import ParkingSlot, Camera, Path, Kiosk
 from .config import api_config
 from .config import valid_kiosk_specs
 from .arithmetics.geoDistance import isCovered, geoDistance
 import json
 import requests
+from django.views.decorators.csrf import csrf_exempt
+
 
 def parseSlots():
     r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%s'
@@ -109,6 +111,7 @@ def getNearest(coordList):
         radius += 50
     return {"Result": True, "Data": result}
 
+@csrf_exempt
 def index(request):
     if (len(Camera.objects.all()) == 0):
         parseMassCameras()
@@ -125,9 +128,16 @@ def index(request):
         parceKiosks(api_config['id_kiosks_reserves'])
         parceKiosks(api_config['id_kiosks_parks'])
         return HttpResponse('Parced Kiosks')
-    req = json.loads(request.body.encode('utf-8'))
+    req = json.loads(request.body.decode('utf-8'))
     if (req['RequestType'] == 'giveData'):
-        return JsonResponse(ParkingSlot.objects.all())
+        returnList = []
+        for i in ParkingSlot.objects.all():
+            returnList.append({
+            'globalId': i.globalId,
+            'name': i.name,
+            'coordinates': i.coordinates
+            })
+        return JsonResponse(returnList, safe = False)
     if (req['RequestType'] == 'giveNearest'):
-        return JsonResponse(getNearest(req['Point']))
+        return JsonResponse(getNearest(req['Point']), safe = False)
     return HttpResponse('Working')

@@ -43,47 +43,76 @@
     -->
   <script type="text/javascript">
 
-    ymaps.ready(init); 
+    ymaps.ready(init);
     var myMap;
-  
+
     function init() {
-  
+
       myMap = new ymaps.Map("map", {
         center: [55.753215, 37.622504], // Координаты центра карты
         zoom: 9, // Маштаб карты
         controls: [],
-      });
-  
+      },
+      objectManager = new ymaps.ObjectManager({
+        clusterize: true,
+      }));
+
+      myMap.geoObjects.add(objectManager);
+
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://127.0.0.1:8000/API/', false);
+      xhr.send(JSON.stringify({"RequestType": "giveData"}));
+      let data = [];
+
+      //console.log(xhr.response);
+
+      if (xhr.statusText == "OK") {
+        data = JSON.parse(xhr.response);
+      } else{
+        console.log('Request error');
+      }
+
+      let resultData = {"type": "FeatureCollection", "features": []};
+
+      for (var i = 0; i < data.length; i++){
+        //console.log(data[i].coordinates);
+        let pointName = "<div class='yt a_map'>" + data[i].name + "</div>";
+        let item = {"type": "Feature", "id": i, "geometry": {"type": "Point",
+        "coordinates": [JSON.parse(data[i].coordinates)[1], JSON.parse(data[i].coordinates)[0]]},
+        "properties": {"balloonContentBody": pointName}}
+        resultData.features.push(item)
+        //myPlacemark = new ymaps.Placemark([JSON.parse(data[i].coordinates)[1], JSON.parse(data[i].coordinates)[0]]);
+        //myMap.geoObjects.add(myPlacemark);
+        //myPlacemark.balloon.open();
+      }
+
+      objectManager.add(JSON.stringify(resultData));
+
       /*
       myPlacemark = new ymaps.Placemark([55.753215, 37.622504], { // Координаты метки объекта
         balloonContent: "<div class='yt a_map'>Заезжайте в гости!</div>" // Подсказка метки
       }, {
         preset: "twirl#redDotIcon" // Тип метки
       });
-    
-      myMap.geoObjects.add(myPlacemark); // Добавление метки
-      myPlacemark.balloon.open(); // Открытие подсказки метки
       */
-    
+
+      //myMap.geoObjects.add(myPlacemark); // Добавление метки
+      //myPlacemark.balloon.open(); // Открытие подсказки метки
+
     };
 
-    //document.addEventListener('makePoint', function(){})
-  
-    let response = fetch('http://127.0.0.1:8000/API', {method: 'POST', body: JSON.stringify({"RequestType": "giveData"})});
-    let data = [];
-
-    if (response.ok) {
-      data = response.json();
-    }else{
-      console.log('Request error');
-    }
-
-    console.log(data);
-
+    /*
     for (var i = 0; i < data.length; i++){
-      let myPlacemark = new ymaps.Placemark([data[i].coordinates[1], data[i].coordinates[0]]);
+      console.log(data[i].coordinates);
+      myPlacemark = new ymaps.Placemark(data[i].coordinates, { // Координаты метки объекта
+        balloonContent: "<div class='yt a_map'>Заезжайте в гости!</div>" // Подсказка метки
+      }, {
+        preset: "twirl#redDotIcon" // Тип метки
+      });
       myMap.geoObjects.add(myPlacemark);
     }
+    */
+
 
   </script>
   </body>
