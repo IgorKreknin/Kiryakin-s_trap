@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import User, Bicycle
 import json
+import re
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
@@ -9,18 +10,21 @@ def index(request):
     if (request.method == 'GET'):
         return JsonResponse({"Result": False})
     dict = json.loads(request.body.decode('utf-8'))
-    if (checkRequirements(dict)):
-        if (dict['type'] == 'register'):
+    print(dict)
+    result = {"Result": False}
+    if (checkRequirementsReg(dict)):
+        if (dict['action'] == 'register'):
             result = createUser(dict)
-        if (dict['type'] == 'auth'):
+    if (checkRequirementsLog(dict)):
+        if (dict['action'] == 'auth'):
             result = logInUser(dict)
     if (result["Result"]):
         return JsonResponse(result)
     return JsonResponse({"Result": False})
 
-def checkRequirements(argDict):
-    userlogilist = User.objects.filter(login = argDict['login'])
-    useremaillist = User.objects.filter(email = argDict['login'])
+def checkRequirementsReg(argDict):
+    userloginlist = User.objects.filter(login = argDict['login'])
+    useremaillist = User.objects.filter(email = argDict['email'])
     if (len(userloginlist) != 0 or len(useremaillist) != 0):
         return False
     if (argDict['login'] == ''):
@@ -39,13 +43,26 @@ def checkRequirements(argDict):
         return False
     if (argDict['phone'][0] != '+'):
         return False
-    if (str(int(argDict['phone'])) != argDict['phone']):
+    if (not bool(re.match('^(\d{11})$', argDict['phone'][1:]))):
         return False
     if (argDict['email'] == ''):
         return False
-    if (not re.fullmatch('[^@]+@[^@]+\.[^@]+', argDict['email'])):
+    if (not bool(re.match('[^@]+@[^@]+\.[^@]+', argDict['email']))):
         return False
     return True
+
+def checkRequirementsLog(argDict):
+    userloginlist = User.objects.filter(login = argDict['login'])
+    print(userloginlist)
+    if (len(userloginlist) == 0):
+        return False
+    if (argDict['login'] == ''):
+        return False
+    if (argDict['password'] == ''):
+        return False
+    if (argDict['password'] != userloginlist['passw']):
+        return False
+
 
 def createUser(argDict):
     data = User(
@@ -57,7 +74,9 @@ def createUser(argDict):
     email = argDict['email']
     )
     data.save()
+    print('Person registered')
     return {"Result": True, "User": argDict}
 
 def logInUser(argDict):
+    print('Log In success')
     return {"Result": True, "User": argDict}
