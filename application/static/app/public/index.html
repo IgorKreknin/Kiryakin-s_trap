@@ -91,7 +91,7 @@
       }
 
       myMap.events.add('click', function (event) { //Событие клика на карту
-        let myCoords = myMap.get('coords');
+        let myCoords = event.get('coords');
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'http://127.0.0.1:8000/API/', false);
@@ -104,17 +104,18 @@
           console.log('Request error');
         }
 
-        objectManager.ObjectCollection.removeAll();
+        objectManager.removeAll();
 
         if (data.Result){
           let localData = JSON.parse(localStorage.getItem('data'));
           let resultData = {"type": "FeatureCollection", "features": []};
-          for (var i = 0; i < data.Points; i++) {
+          for (var i = 0; i < data.PointIds.length; i++) {
             for (var j = 0; j < localData.length; j++){
-              if (localData[j].globalId == data.Points[i]){
+              if (localData[j].globalId == data.PointIds[i]){
+                console.log(localData[j].coordinates)
                 let pointName = "<div class='yt a_map'>" + localData[i].name + "</div>";
                 let item = {"type": "Feature", "id": i, "geometry": {"type": "Point",
-                "coordinates": [JSON.parse(localData[i].coordinates)[1], JSON.parse(localData[i].coordinates)[0]]},
+                "coordinates": [JSON.parse(localData[j].coordinates)[1], JSON.parse(localData[j].coordinates)[0]]},
                 "properties": {"balloonContentBody": pointName}}
                 resultData.features.push(item);
                 break;
@@ -122,10 +123,12 @@
             }
           }
 
+          console.log(resultData);
+
           objectManager.add(JSON.stringify(resultData));
         }
 
-        console.log(data);                
+        console.log(data);
       })
 
 

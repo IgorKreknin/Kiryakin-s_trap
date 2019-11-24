@@ -103,13 +103,17 @@ def getNearest(coordList):
     parkingStations = ParkingSlot.objects.all()
     result = []
     radius = 50
-    while (len(result) == 0):
+    while (radius <= 300):
         for i in parkingStations:
-            if (geoDistace(coordList, json.loads(i['coordinates'])) <= radius):
-                result.append(i['globalId'])
-        if (radius == 300 and len(result) == 0):
-            return {"Result": False}
+            if (geoDistance([coordList[1], coordList[0]], json.loads(i.coordinates)) <= radius):
+                print(geoDistance([coordList[1], coordList[0]], json.loads(i.coordinates)))
+                print(i.coordinates, i.globalId, i.name)
+                result.append(i.globalId)
+        if (len(result) != 0):
+            break
         radius += 50
+    if (len(result) == 0):
+        return {"Result": False}
     return {"Result": True, "PointIds": result}
 
 def addUserRating(addId, newRating):
@@ -133,9 +137,6 @@ def index(request):
         parceKiosks(api_config['id_kiosks_reserves'])
         parceKiosks(api_config['id_kiosks_parks'])
         return HttpResponse('Parced Kiosks')
-    else:
-        setUserRating()
-        return "Ratings set"
     req = json.loads(request.body.decode('utf-8'))
     if (req['RequestType'] == 'giveData'):
         returnList = []
