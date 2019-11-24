@@ -104,12 +104,16 @@ def getNearest(coordList):
     radius = 50
     while (len(result) == 0):
         for i in parkingStations:
-            if (geoDistace(coordList, json.loads(i['coordinates'])) <= 50):
-                result.append(json.dumps(i))
+            if (geoDistace(coordList, json.loads(i['coordinates'])) <= radius):
+                result.append(i['globalId'])
         if (radius == 300 and len(result) == 0):
             return {"Result": False}
         radius += 50
-    return {"Result": True, "Data": result}
+    return {"Result": True, "PointIds": result}
+
+def addUserRating(addId, newRating):
+    parkingStations = ParkingSlot.objects.filter(globalId = addId)
+    parkingStations.calculateUserRating(newRating)
 
 @csrf_exempt
 def index(request):
@@ -135,7 +139,8 @@ def index(request):
             returnList.append({
             'globalId': i.globalId,
             'name': i.name,
-            'coordinates': i.coordinates
+            'coordinates': i.coordinates,
+            'userRating': i.userRating.currentRating,
             })
         return JsonResponse(returnList, safe = False)
     if (req['RequestType'] == 'giveNearest'):
