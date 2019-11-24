@@ -54,6 +54,7 @@
         controls: [],
       });
   
+      /*
       myPlacemark = new ymaps.Placemark([55.753215, 37.622504], { // Координаты метки объекта
         balloonContent: "<div class='yt a_map'>Заезжайте в гости!</div>" // Подсказка метки
       }, {
@@ -62,13 +63,14 @@
     
       myMap.geoObjects.add(myPlacemark); // Добавление метки
       myPlacemark.balloon.open(); // Открытие подсказки метки
+      */
     
     };
 
     //document.addEventListener('makePoint', function(){})
   
-    let response = await fetch('http://127.0.0.1:8000/API');
-    let data = '';
+    let response = fetch('http://127.0.0.1:8000/API');
+    let data = [];
 
     if (response.ok) {
       data = response.json();
@@ -77,6 +79,11 @@
     }
 
     console.log(data);
+
+    for (var i = 0; i < data.length; i++){
+      let myPlacemark = new ymaps.Placemark([data[i].coordinates[1], data[i].coordinates[0]]);
+      myMap.geoObjects.add(myPlacemark);
+    }
 
   </script>
   </body>
