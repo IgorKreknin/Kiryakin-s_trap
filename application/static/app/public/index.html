@@ -128,9 +128,32 @@
           objectManager.add(JSON.stringify(resultData));
         }
 
+        document.addEventListener('printAll', function() {
+          objectManager.removeAll();
+
+          let resultData = {"type": "FeatureCollection", "features": []};
+
+          let data = JSON.parse(localStorage.getItem('data'));
+
+          for (var i = 0; i < data.length; i++) {
+            let pointName = "<div class='yt a_mp'>" + data[i].name + "</div>";
+            let item = {"type": "Feature", "id": i, "geometry": {"type": "Point",
+            "coordinates": [JSON.parse(data[i].coordinates)[1], JSON.parse(data[i].coordinates)[0]]},
+            "properties": {"balloonContentBody": pointName}}
+            resultData.features.push(item);
+          }
+          objectManager.add(JSON.stringify(resultData))
+        })
+        /*
+        objectManager.objects.event.add('click', function(event){
+          let objectId = event.get('objectId');
+
+          let obj = objectManager.objects.getById(objectId);
+          console.log('qweqwe');
+        })
+        */
         console.log(data);
       })
-
 
 
       objectManager.add(JSON.stringify(resultData));

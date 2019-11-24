@@ -13,4 +13,23 @@
 	background-color: white;
 	color: #00cfff;
 	font-family: Arial;
+	font-size: 500%;
+	text-align: center;
+}
+
+.showAll {
+	position: relative;
+	width: 30%;
+	margin-left: 35%;
+	margin-right: 35%;
+	margin-top: 10px;
+	background: #00c0ff;
+	font-size: 200%;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+}
+
+.hide {
+	display: none;
 }
