@@ -82,7 +82,8 @@ def parceKiosks(kioskId):
     r = requests.get('https://apidata.mos.ru/v1/datasets/%d/rows/?api_key=%s'
     % (kioskId, api_config['api_key']))
     for p in r.json():
-        if (p['Cells']['ContractStatus'] == 'действует') and (p['Cells']['Specialization'] in valid_kiosk_specs):
+        if (p['Cells']['ContractStatus'] == 'действует') and (p['Cells']['Specialization'][0] in valid_kiosk_specs):
+            print(1)
             data = Kiosk(
                 globalId = p['Cells']['global_id'],
                 name = p['Cells']['Name'],
@@ -95,6 +96,18 @@ def parceKiosks(kioskId):
             )
             data.save()
 
+def getNearest(coordList):
+    parkingStations = ParkingSlot.objects.all()
+    result = []
+    radius = 50
+    while (len(result) == 0):
+        for i in parkingStations:
+            if (geoDistace(coordList, json.loads(parkingStations['coordinates'])) <= 50):
+                result.append()
+        if (radius == 300):
+            return {"Result": False}
+        radius += 50
+    return {"Result": True, "Data": result}
 
 def index(request):
     if (len(Camera.objects.all()) == 0):
@@ -112,4 +125,5 @@ def index(request):
         parceKiosks(api_config['id_kiosks_reserves'])
         parceKiosks(api_config['id_kiosks_parks'])
         return HttpResponse('Parced Kiosks')
+    print(request.body)
     return HttpResponse('Working')

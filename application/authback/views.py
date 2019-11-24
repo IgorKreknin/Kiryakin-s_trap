@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def index(request):
+    if (request.method == 'GET'):
+        return JsonResponse({"Result": False})
     dict = json.loads(request.body.decode('utf-8'))
     if (checkRequirements(argDict)):
         if (dict['type'] == 'register'):
@@ -17,8 +19,10 @@ def index(request):
     return JsonResponse({"Result": False})
 
 def checkRequirements(argDict):
-    userlist = User.objects.filter(login = argDict['login']
-    or email = argDictp['email'])
+    userlogilist = User.objects.filter(login = argDict['login'])
+    useremaillist = User.objects.filter(email = argDict['login'])
+    if (len(userloginlist) != 0 or len(useremaillist) != 0):
+        return False
     if (argDict['login'] == ''):
         return False
     if (argDict['password'] == ''):
